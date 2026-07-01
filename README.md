@@ -1,59 +1,91 @@
-# MyApp
+# IoT Protocol Engine
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+A multi-tenant web platform for managing, monitoring, and billing fleets of IoT devices. Built with Angular 16 and Angular Material, it gives tenant admins and users a single dashboard to provision devices, define data-processing and alert rules, manage teams, and track usage-based billing.
 
-## Development server
+## Highlights
 
-To start a local development server, run:
+- **Multi-tenant device fleet management** — track boards/sensors (temperature, humidity, pressure, motion) with live status (`ONLINE`, `OFFLINE`, `MAINTENANCE`, `ERROR`), firmware versions, and remote command dispatch with full execution history.
+- **Configurable data pipeline per tenant** — a rules engine lets each tenant define its own data schema (typed fields including temperature, humidity, pressure, GPS, voltage/current), processing rules (transform, filter, aggregate, enrich) with conditional logic, and alert rules with severity levels and multi-channel notifications (email, SMS, webhook, push, Slack, Teams).
+- **Usage-based billing engine** — automatic bill calculation per period with itemized subscription, overage, and discount line items, paginated bill history, PDF export, and device API token management with masked-token display.
+- **Role-based access control** — route guards and interceptors enforce `tenant_admin` vs `tenant_user` permissions across users, billing, and configuration areas; JWT is injected automatically and refreshed sessions are handled via HTTP interceptors.
+- **Zero-backend developer experience** — every service ships with a realistic mock-data layer toggled by a single `environment.mockApi` flag, so the full UI — dashboards, boards, billing, configuration — is explorable and demoable without standing up an API.
+- **Modern Angular architecture** — standalone components throughout (no NgModules), lazy-loaded feature routes, barrel-exported core/shared layers, and a clean separation between `core` (services, guards, interceptors, models) and `shared` (reusable UI components and pipes).
+- **Polished, responsive UI** — Angular Material with a custom indigo theme, a collapsible sidenav that adapts from desktop to mobile, KPI stat cards, status badges, and reusable dialogs/spinners for a consistent experience across every screen.
 
-```bash
-ng serve
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Angular 16 (standalone components) |
+| UI | Angular Material 16 + Angular CDK |
+| Reactive state | RxJS (Observables / BehaviorSubjects) |
+| Styling | SCSS, custom indigo Material theme, DM Sans / JetBrains Mono |
+| HTTP | Angular `HttpClient` with JWT interceptor |
+| Testing | Karma + Jasmine |
+| Language | TypeScript 5.1 |
+
+## Application Structure
+
+```
+src/app/
+├── auth/            # Login, registration, forgot/reset password
+├── dashboard/        # Landing page with fleet stats and recent activity
+├── boards/           # IoT device list and detail views
+├── users/             # Tenant user management (admin only)
+├── configuration/     # Data schema, processing rules, alert rules (admin only)
+├── billing/           # Bill overview, history, and detail (admin only)
+├── settings/          # User account settings
+├── core/
+│   ├── guards/        # auth.guard, role.guard
+│   ├── interceptors/  # JWT injection, error handling
+│   ├── services/      # auth, api, board, user, billing, config
+│   └── models/        # Typed domain models (User, Board, Bill, Config, Tenant)
+└── shared/
+    ├── components/    # stats-card, status-badge, page-header, confirm-dialog, loading-spinner
+    └── pipes/         # relative-time, truncate
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting Started
 
-## Code scaffolding
+### Prerequisites
+- Node.js and npm
+- Angular CLI 16.x (`npm install -g @angular/cli@16`)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+### Install
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+### Run the development server
 ```bash
-ng generate --help
+npm start
+```
+Navigate to `http://localhost:4200/`. With `environment.mockApi` set to `true` (the default in development), the app runs fully self-contained against realistic in-memory sample data — no backend required.
+
+### Build for production
+```bash
+npm run build
+```
+Production builds use `environment.prod.ts` (`mockApi: false`) and require `apiUrl` to be pointed at a real backend implementing the endpoints declared in `src/environments/environment.prod.ts`.
+
+### Run unit tests
+```bash
+npm test
 ```
 
-## Building
+## Configuration
 
-To build the project run:
+Environment files live in `src/environments/`:
 
-```bash
-ng build
-```
+| Key | Purpose |
+|---|---|
+| `production` | Enables production optimizations |
+| `mockApi` | Serves mock data from services instead of calling a real API |
+| `apiUrl` | Base URL for the backend API |
+| `endpoints` | Path map for auth, boards, users, config, and billing endpoints |
+| `tokenKey` / `userKey` | localStorage keys for the JWT and current user session |
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Roles
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **`tenant_admin`** — full access, including Users, Configuration, and Billing.
+- **`tenant_user` / `end_user`** — access to Dashboard, Boards, and Settings.
