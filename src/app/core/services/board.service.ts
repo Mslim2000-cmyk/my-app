@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '@env/environment';
 import {
   Board,
   BoardStats,
