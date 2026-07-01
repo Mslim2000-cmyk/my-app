@@ -1,0 +1,91 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Create Your Account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Already have an account?
+        <a routerLink="/login" class="font-medium text-indigo-600 hover:text-indigo-500">
+          Sign in
+        </a>
+      </p>
+    </div>
+
+    <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="space-y-4">
+        <!-- Company Name -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Company Name</label>
+          <input 
+            type="text" 
+            formControlName="company_name"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter company name">
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input 
+            type="email" 
+            formControlName="email"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter email">
+        </div>
+
+        <!-- Industry -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Industry</label>
+          <select 
+            formControlName="industry"
+            aria-label="Industry"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="" disabled selected>Select industry</option>
+            <option *ngFor="let industry of industries" [value]="industry.value">
+              {{ industry.label }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Password</label>
+          <input 
+            type="password" 
+            formControlName="password"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter password">
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input 
+            type="password" 
+            formControlName="confirm_password"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Confirm password">
+        </div>
+      </div>
+
+      <div>
+        <button 
+          type="submit" 
+          [disabled]="registerForm.invalid"
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+          Create Account
+        </button>
+      </div>
+
+      <div class="text-center">
+        <button 
+          type="button" 
+          (click)="router.navigate(['/login'])"
+          class="text-sm text-indigo-600 hover:text-indigo-500">
+          Back to Login
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

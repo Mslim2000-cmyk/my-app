@@ -1,0 +1,5 @@
+/* Global styles for app component */
+:host {
+  display: block;
+  height: 100vh;
+}

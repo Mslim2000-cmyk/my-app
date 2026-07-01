@@ -1,0 +1,26 @@
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}${environment.endpoints.login}`,
+      credentials
+    ).pipe(
+      tap(response => {
+        this.setToken(response.token);
+        this.setStoredUser(response.user);
+        this.currentUserSubject.next(response.user);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Register a new user
+   */
+  register(userData: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}${environment.endpoints.register}`,
+      userData
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
