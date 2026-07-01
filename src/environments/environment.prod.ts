@@ -1,6 +1,7 @@
 // Production environment configuration
 export const environment = {
   production: true,
+  mockApi: false,
   apiUrl: 'https://api.your-domain.com', // Replace with production URL
   
   // API Endpoints
